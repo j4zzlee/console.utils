@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Text.RegularExpressions;
 
 namespace st2forget.console.utils
@@ -112,7 +113,7 @@ namespace st2forget.console.utils
             var tabs = tabRegex.Matches(segment);
             for (var j = 0; j < parts.Length; j++)
             {
-                var part = parts[j];
+                var part = parts[j].Replace("\t", new string(' ', 4));
 
                 characterPassed = part.IndexOf('\n') != -1
                     ? part.Length - part.LastIndexOf('\n')
@@ -124,10 +125,13 @@ namespace st2forget.console.utils
                 }
                 var tab = tabs[j];
                 var totalWhitespace = int.Parse(replaceTabRegex.Replace(tab.Value, "$1"));
-
-                Console.Write(totalWhitespace > characterPassed
-                    ? part.PadRight(totalWhitespace - characterPassed)
-                    : part);
+                Console.Write(part);
+                if (totalWhitespace > characterPassed)
+                {
+                    Console.Write(new string(' ', totalWhitespace - characterPassed));
+                }
+                
+                characterPassed = 0;
             }
             return characterPassed;
         }
